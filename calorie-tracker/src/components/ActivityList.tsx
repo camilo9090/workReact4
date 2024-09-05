@@ -3,6 +3,7 @@
 import { Activity } from "../types"
 import { categories } from "../data/categories"
 import { useMemo } from "react"
+import { PencilSquareIcon } from '@heroicons/react/24/outline'
 type ActivityListProps = {
 
     activities: Activity[]
@@ -11,7 +12,7 @@ export default function ActivityList({ activities }: ActivityListProps) {
 
     const categoryName = useMemo(
         () =>
-            (category: Activity['category']) =>categories.map(cat => cat.id === category ? cat.name : '')
+            (category: Activity['category']) => categories.map(cat => cat.id === category ? cat.name : '')
         , [activities])
 
 
@@ -31,7 +32,7 @@ export default function ActivityList({ activities }: ActivityListProps) {
 
                     <div className=" space-y-2 relative">
                         <p className={`absolute -top-8 -left-8 px-10 py-2 text-white uppercase font-bold
-                             ${activity.category===1?'bg-indigo-500':'bg-orange-500'}`}>
+                             ${activity.category === 1 ? 'bg-indigo-500' : 'bg-orange-500'}`}>
                             {categoryName(+activity.category)}
                         </p>
                         <p className="text-2xl font-bold pt-5">
@@ -43,7 +44,14 @@ export default function ActivityList({ activities }: ActivityListProps) {
                         </p>
 
                     </div>
-                    <div></div>
+                    <div className="flex gap-5 items-center">
+                        <button>
+                           <PencilSquareIcon
+                           className="h-8 w-8 text-gray-800"
+                           /> 
+                        </button>
+
+                    </div>
 
                 </div>
 
