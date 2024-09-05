@@ -3,14 +3,15 @@ import { Activity } from "../types"
 export type ActivityActions =
 
     { type: 'save-activity', payload: { newActivity: Activity } } |
-    { type: 'set-activeId', payload: { id: Activity['id'] } }
+    { type: 'set-activeId', payload: { id: Activity['id'] } } |
+    { type: 'delete-activity', payload: { id: Activity['id'] } }
 
 
 
 
 
 
-type ActivityState = {
+export type ActivityState = {
 
     activities: Activity[],
     activeId: Activity['id']
@@ -29,19 +30,43 @@ export const activitiReducer = (
 
     if (action.type === 'save-activity') {
         //este codigo maneja la logica para ejecutar state
+
+        let updateActivities: Activity[] = []
+        if (state.activeId) {
+            updateActivities = state.activities.map(Activity => Activity.id === state.activeId ?
+                action.payload.newActivity : Activity
+
+            )
+
+        } else {
+            updateActivities = [...state.activities, action.payload.newActivity]
+
+        }
         return {
 
             ...state,
-            activities: [...state.activities, action.payload.newActivity]
+            activities: updateActivities,
+            //se reinicia el id para que cuando se ingrese un nuevo objeto 
+            //no se borre 
+            activeId:''
         }
 
     }
-    if (action.type==='set-activeId') {
-        return{
+    if (action.type === 'set-activeId') {
+        return {
 
 
             ...state,
-            activeId:action.payload.id
+            activeId: action.payload.id,
+            
+        }
+    }
+
+    if (action.type==='delete-activity') {
+        
+        return{
+            ...state,
+            activities:state.activities.filter(deleteActivity=>deleteActivity.id!==action.payload.id)
         }
     }
     return state
