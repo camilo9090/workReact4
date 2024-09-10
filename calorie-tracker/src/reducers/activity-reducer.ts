@@ -16,11 +16,18 @@ export type ActivityState = {
     activities: Activity[],
     activeId: Activity['id']
 }
+const localStorageActivities = ():Activity[] => {
+
+    const activities = localStorage.getItem('activities')
+
+    return activities ? JSON.parse(activities) : []
+}
 export const initialState: ActivityState = {
 
-    activities: [],
+    activities: localStorageActivities(),
     activeId: ''
 }
+
 
 export const activitiReducer = (
 
@@ -48,7 +55,7 @@ export const activitiReducer = (
             activities: updateActivities,
             //se reinicia el id para que cuando se ingrese un nuevo objeto 
             //no se borre 
-            activeId:''
+            activeId: ''
         }
 
     }
@@ -58,15 +65,15 @@ export const activitiReducer = (
 
             ...state,
             activeId: action.payload.id,
-            
+
         }
     }
 
-    if (action.type==='delete-activity') {
-        
-        return{
+    if (action.type === 'delete-activity') {
+
+        return {
             ...state,
-            activities:state.activities.filter(deleteActivity=>deleteActivity.id!==action.payload.id)
+            activities: state.activities.filter(deleteActivity => deleteActivity.id !== action.payload.id)
         }
     }
     return state
