@@ -1,6 +1,7 @@
 
 import { useMemo } from 'react'
 import type { Activity } from '../types'
+import CaloriesDisplay from './CaloriesDisplay'
 
 type CalorieTrackerProps = {
 
@@ -15,6 +16,7 @@ export default function CalorieTracker({ activities }: CalorieTrackerProps) {
         total + activity.calories : total, 0), [activities])
     const caloriesBorne = useMemo(() => activities.reduce((total, activity) => activity.category === 2 ?
         total + activity.calories : total, 0), [activities])
+    const netCalories = useMemo(() => caloriesConsumed - caloriesBorne, [activities])
     return (
         <>
 
@@ -22,19 +24,23 @@ export default function CalorieTracker({ activities }: CalorieTrackerProps) {
             <h2 className='text-4xl font-black text-white text-center'>Resumen de Calorias</h2>
             <div className='flex flex-col items-center md:flex-row md:justify-between gap-5 mt-5'>
 
-                <p className='text-white font-bold rounded-full grid grid-cols-1 gap-3 text-center'>
+                <CaloriesDisplay
 
-                    <span className='font-black text-6xl text-orange'>{caloriesConsumed}</span>
-                    Consumidas
+                    calories={caloriesConsumed}
+                    text="Consumidas"
+                />
 
-                </p>
+                <CaloriesDisplay
 
-                <p className='text-white font-bold rounded-full grid grid-cols-1 gap-3 text-center'>
+                    calories={caloriesBorne}
+                    text="Quemadas"
+                />
 
-                    <span className='font-black text-6xl text-orange'>{caloriesBorne}</span>
-                    Quemadas
+                <CaloriesDisplay
 
-                </p>
+                    calories={netCalories}
+                    text="Diferencia"
+                />
             </div>
 
         </>
